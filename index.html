@@ -186,7 +186,7 @@
             <div class="art-wrapper">
                 <div class="album-art">
                     <span id="scanBadge" class="scan-badge">SCANNING...</span>
-                    <img id="albumCover" src="https://i.pinimg.com/736x/31/ab/a6/31aba6b19f86ae88cf682eb5f07e886b.jpg" crossorigin="anonymous">
+                    <img id="albumCover" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" crossorigin="anonymous">
                 </div>
             </div>
 
@@ -289,7 +289,7 @@
         checkTitleLength();
         determineQuality(track.mimeType, track.name);
 
-        document.getElementById('albumCover').src = "https://i.pinimg.com/736x/31/ab/a6/31aba6b19f86ae88cf682eb5f07e886b.jpg";
+        document.getElementById('albumCover').src = "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
         resetTheme();
 
         const streamUrl = `https://www.googleapis.com/drive/v3/files/${track.id}?alt=media&key=${globalApiKey}`;
@@ -478,6 +478,4 @@
     }
 </script>
 </body>
-
 </html>
-
