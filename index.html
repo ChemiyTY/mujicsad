@@ -43,7 +43,7 @@
         border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
         
         /* PC STYLE */
-        width: 380px; height: 720px; max-height: 95vh;
+        width: 380px; height: 740px; max-height: 95vh;
         border-radius: 44px; padding: 40px 32px;
         
         position: relative;
@@ -64,17 +64,22 @@
 
     /* PLAYER VIEW */
     
-    /* 1. ART WRAPPER */
+    /* 1. ART WRAPPER (Updated Layout) */
     .art-wrapper {
-        width: 100%; display: flex; justify-content: center; align-items: center;
+        width: 100%; 
+        display: flex; 
+        flex-direction: column; /* Susun ke bawah (Cover atas, Badge bawah) */
+        align-items: center; justify-content: center;
         flex-shrink: 0; margin-bottom: 15px;
     }
+    
     .album-art {
         width: 100%; max-width: 280px; 
-        aspect-ratio: 1 / 1; /* WAJIB KOTAK */
+        aspect-ratio: 1 / 1; 
         border-radius: 24px;
         overflow: hidden; background: #222; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         position: relative;
+        margin-bottom: 15px; /* Jarak antara Cover dan Badge */
     }
     .album-art img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
     .scan-badge {
@@ -82,32 +87,31 @@
         padding: 6px 12px; border-radius: 12px; font-size: 0.65rem; font-weight: 700; opacity: 0; transition: 0.3s;
     }
 
-    /* 2. INFO & BADGE */
+    /* BADGE (Posisi Baru) */
+    .quality-badge {
+        display: none; align-items: center; justify-content: center;
+        padding: 6px 12px; border-radius: 8px; /* Lebih besar dikit */
+        font-size: 0.7rem; font-weight: 800; letter-spacing: 1.5px;
+        text-transform: uppercase; margin: 0 auto; width: fit-content; transition: 0.3s;
+    }
+    .quality-badge.lossless {
+        display: inline-flex; border: 1px solid var(--accent); 
+        color: var(--accent); background: rgba(255, 255, 255, 0.05); box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    }
+    .quality-badge.hires {
+        display: inline-flex; border: 1px solid #4facfe; 
+        color: #4facfe; background: rgba(79, 172, 254, 0.1); box-shadow: 0 0 15px rgba(79, 172, 254, 0.2);
+    }
+
+    /* 2. INFO */
     .info-container { 
-        text-align: center; margin-bottom: 10px; min-height: 80px; 
+        text-align: center; margin-bottom: 10px; min-height: 60px; 
         display: flex; flex-direction: column; justify-content: center;
     }
     .track-marquee { overflow: hidden; width: 100%; white-space: nowrap; padding: 5px 0; margin-bottom: -5px; mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
     .song-title-wrapper { display: inline-block; padding-left: 0; }
     .song-title { font-size: 1.5rem; font-weight: 700; display: inline-block; line-height: 1.4; }
-    .artist-name { font-size: 1rem; opacity: 0.6; margin: 4px 0 10px; }
-
-    /* BADGE STYLES */
-    .quality-badge {
-        display: none; align-items: center; justify-content: center;
-        padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;
-        text-transform: uppercase; margin: 0 auto; width: fit-content; transition: 0.3s;
-    }
-    /* GOLD */
-    .quality-badge.lossless {
-        display: inline-flex; border: 1px solid var(--accent); 
-        color: var(--accent); background: rgba(255, 255, 255, 0.05); box-shadow: 0 0 15px rgba(255,255,255,0.1);
-    }
-    /* CYAN / BLUE untuk HI-RES */
-    .quality-badge.hires {
-        display: inline-flex; border: 1px solid #4facfe; 
-        color: #4facfe; background: rgba(79, 172, 254, 0.1); box-shadow: 0 0 15px rgba(79, 172, 254, 0.2);
-    }
+    .artist-name { font-size: 1rem; opacity: 0.6; margin: 4px 0 0px; }
 
     /* 3. SLIDER */
     .slider-wrapper { width: 100%; margin-bottom: 10px; }
@@ -133,28 +137,22 @@
     .btn-play:active { transform: scale(0.9); }
     .playing .btn-play { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 30px var(--accent); }
 
-    /* === MOBILE LAYOUT (Tombol Turun) === */
+    /* MOBILE ADJUSTMENTS */
     @media (max-width: 480px) {
         .glass-card { 
             width: 100%; height: 100vh; border-radius: 0; border: none; 
-            padding: 30px 25px 50px 25px; /* Padding bawah extra untuk jempol */
-            justify-content: flex-end; /* DORONG SEMUA ISI KE BAWAH */
+            padding: 30px 25px 50px 25px; justify-content: flex-end; /* Tombol di bawah */
         }
         
         .art-wrapper {
-            flex-grow: 1; /* Album art mengisi SISA ruang kosong di atas */
-            margin-bottom: auto; /* Dorong ke atas */
-            margin-top: 20px;
+            flex-grow: 1; margin-bottom: auto; margin-top: 20px;
         }
         
         .album-art { 
-            width: 80vw; height: 80vw; 
-            max-width: 320px; max-height: 320px; 
+            width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; 
         }
 
-        .controls-row {
-            padding-bottom: 20px; /* Jarak aman dari edge bawah HP */
-        }
+        .controls-row { padding-bottom: 20px; }
     }
 
     @keyframes scrollText { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
@@ -192,6 +190,7 @@
                     <span id="scanBadge" class="scan-badge">SCANNING...</span>
                     <img id="albumCover" src="./cover.png" crossorigin="anonymous">
                 </div>
+                <div id="qualityBadge" class="quality-badge">LOSSLESS</div>
             </div>
 
             <div class="info-container">
@@ -201,7 +200,6 @@
                     </div>
                 </div>
                 <p class="artist-name" id="playlistInfo">Playlist 0/0</p>
-                <div id="qualityBadge" class="quality-badge">LOSSLESS</div>
             </div>
 
             <div class="slider-wrapper">
@@ -292,7 +290,7 @@
         
         checkTitleLength();
         
-        // --- LOGIC BARU: FORCE EXTENSION CHECK ---
+        // DETEKSI GANDA: BROWSER + KODE
         determineQuality(track.mimeType, track.name); 
 
         document.getElementById('albumCover').src = "./cover.png";
@@ -305,21 +303,26 @@
         extractCoverArt(streamUrl);
     }
 
-    // --- FORCE CHECK EXTENSION & HI-RES (FIXED) ---
+    // --- LOGIC DETEKSI GANDA (MIME + EXTENSION) ---
     function determineQuality(mime, filename) {
+        // Normalisasi
+        const ext = filename.split('.').pop().toLowerCase();
+        const mimeType = mime ? mime.toLowerCase() : ""; 
         const name = filename.toLowerCase();
-        
+
         // Reset
         qualityBadge.style.display = 'none';
         qualityBadge.className = 'quality-badge';
 
-        // PAKSA CEK EKSTENSI .flac / .wav (Abaikan MIME browser jika perlu)
-        if (name.endsWith('.flac') || name.endsWith('.wav') || name.endsWith('.aiff') || (mime && (mime.includes("flac") || mime.includes("wav")))) {
-            
-            // Set Default Lossless
+        // CEK 1: Apakah Format Lossless? (Cek MIME ATAU Cek Ekstensi File)
+        const isLosslessFormat = 
+            mimeType.includes("flac") || mimeType.includes("wav") || 
+            ext === 'flac' || ext === 'wav' || ext === 'aiff';
+
+        if (isLosslessFormat) {
             qualityBadge.style.display = 'inline-flex';
             
-            // Cek Hi-Res Keyword
+            // CEK 2: Apakah Hi-Res? (Dari Nama File)
             if (name.includes("96k") || name.includes("24bit") || name.includes("192k") || name.includes("88k") || name.includes("hi-res")) {
                 qualityBadge.classList.add('hires');
                 qualityBadge.textContent = "HI-RES LOSSLESS";
@@ -328,7 +331,7 @@
                 qualityBadge.textContent = "LOSSLESS";
             }
         }
-        // MP3 otomatis hidden
+        // Jika MP3, tidak akan masuk blok if, jadi badge tetap hidden.
     }
 
     function applyDynamicTheme(base64Image) {
