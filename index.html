@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <title>Liquid Glass Pro Fixed</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
@@ -27,29 +27,27 @@
         user-select: none; -webkit-user-select: none;
     }
 
+    /* LIQUID BG */
     .liquid-bg { position: absolute; width: 100%; height: 100%; z-index: -1; overflow: hidden; background: radial-gradient(circle at 50% 50%, #121212, #000); }
     .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; animation: floatOrb 12s infinite alternate; transition: background-color 1.5s ease; }
     .orb-1 { width: 500px; height: 500px; background: var(--blob-1); top: -10%; left: -10%; }
     .orb-2 { width: 400px; height: 400px; background: var(--blob-2); bottom: -10%; right: -5%; animation-delay: -5s; }
     .orb-3 { width: 300px; height: 300px; background: var(--blob-3); top: 40%; left: 30%; opacity: 0.4; animation-delay: -2s; }
 
+    /* LAYOUT UTAMA */
     .app-container { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
 
     .glass-card {
         background: var(--glass-bg); backdrop-filter: blur(40px) saturate(180%);
         -webkit-backdrop-filter: blur(40px) saturate(180%);
-        border: 1px solid var(--glass-border); 
-        box-shadow: var(--glass-shadow);
+        border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
         
-        /* UKURAN CARD */
-        width: 380px; 
-        height: 720px;
-        max-height: 95vh;
-        border-radius: 44px;
-        padding: 40px 32px;
+        /* PC: Ukuran Tetap & Elegan */
+        width: 380px; height: 720px; max-height: 95vh;
+        border-radius: 44px; padding: 40px 32px;
         
         position: relative;
-        display: flex; flex-direction: column; justify-content: space-between; /* Penting agar elemen tersebar rata */
+        display: flex; flex-direction: column; justify-content: space-between;
         transition: opacity 0.5s ease;
     }
 
@@ -64,78 +62,59 @@
     .glass-input:focus { background: rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.3); }
     .btn-connect { width: 100%; padding: 18px; border-radius: 18px; border: none; background: white; color: black; font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 10px; }
 
-    /* --- PLAYER VIEW --- */
+    /* PLAYER VIEW */
     
-    /* 1. ALBUM ART FIX (FORCE SQUARE) */
+    /* 1. ART */
     .art-wrapper {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        flex-shrink: 0; /* Jangan biarkan mengecil */
-        margin-bottom: 10px;
+        width: 100%; display: flex; justify-content: center; flex-shrink: 0;
+        margin-bottom: 15px;
     }
-
     .album-art {
-        /* FIX: Gunakan pixel pasti agar tidak gepeng/wide */
-        width: 280px; 
-        height: 280px;
-        
-        border-radius: 24px; 
-        overflow: hidden; 
-        background: #222;
-        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+        width: 280px; height: 280px; border-radius: 24px;
+        overflow: hidden; background: #222; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         position: relative;
     }
     .album-art img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
     .scan-badge {
-        position: absolute; top: 12px; right: 12px; 
-        background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
-        padding: 6px 12px; border-radius: 12px; font-size: 0.65rem; font-weight: 700;
-        opacity: 0; transition: 0.3s; pointer-events: none;
+        position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+        padding: 6px 12px; border-radius: 12px; font-size: 0.65rem; font-weight: 700; opacity: 0; transition: 0.3s;
     }
 
-    /* 2. INFO & BADGE (FIX TEXT KEPENDEM) */
+    /* 2. INFO & BADGE */
+    /* Container Info didorong ke bawah di Mobile */
     .info-container { 
-        text-align: center; 
-        margin-bottom: 10px; 
-        min-height: 85px; 
+        text-align: center; margin-bottom: 10px; min-height: 80px; 
         display: flex; flex-direction: column; justify-content: center;
     }
-    
-    .track-marquee { 
-        overflow: hidden; width: 100%; white-space: nowrap; 
-        /* FIX: Tambah padding agar huruf 'g','j','p' tidak kepotong bawahnya */
-        padding: 5px 0; 
-        margin-bottom: -5px; /* Kompensasi padding */
-        mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); 
-    }
+    .track-marquee { overflow: hidden; width: 100%; white-space: nowrap; padding: 5px 0; margin-bottom: -5px; mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
     .song-title-wrapper { display: inline-block; padding-left: 0; }
     .song-title { font-size: 1.5rem; font-weight: 700; display: inline-block; line-height: 1.4; }
     .artist-name { font-size: 1rem; opacity: 0.6; margin: 4px 0 10px; }
 
-    /* SMART BADGE */
+    /* BADGE STYLES */
     .quality-badge {
         display: none; align-items: center; justify-content: center;
-        padding: 4px 10px; border-radius: 6px;
-        font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;
+        padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;
         text-transform: uppercase; margin: 0 auto; width: fit-content; transition: 0.3s;
     }
     .quality-badge.lossless {
         display: inline-flex; border: 1px solid var(--accent); 
-        color: var(--accent); background: rgba(255, 255, 255, 0.05); 
-        box-shadow: 0 0 15px rgba(255,255,255,0.1);
+        color: var(--accent); background: rgba(255, 255, 255, 0.05); box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    }
+    .quality-badge.hires {
+        display: inline-flex; border: 1px solid #4facfe; 
+        color: #4facfe; background: rgba(79, 172, 254, 0.1); box-shadow: 0 0 15px rgba(79, 172, 254, 0.2);
     }
 
     /* 3. SLIDER */
-    .slider-wrapper { width: 100%; margin-bottom: 15px; }
+    .slider-wrapper { width: 100%; margin-bottom: 10px; }
     input[type=range] { width: 100%; background: transparent; -webkit-appearance: none; cursor: pointer; display: block; }
     input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; }
     input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 12px; width: 12px; border-radius: 50%; background: #fff; margin-top: -4px; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
     .time-row { display: flex; justify-content: space-between; font-size: 0.75rem; opacity: 0.5; margin-top: 8px; font-weight: 600; font-family: monospace; }
 
     /* 4. CONTROLS */
-    .controls-row { display: flex; justify-content: center; align-items: center; width: 100%; gap: 15px; padding-bottom: 10px; }
+    .controls-row { display: flex; justify-content: center; align-items: center; width: 100%; gap: 15px; padding-bottom: 5px; }
     .btn-icon { background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; padding: 12px; transition: 0.2s; }
     .btn-icon:active { transform: scale(0.85); color: white; }
     .btn-icon svg { width: 26px; height: 26px; fill: currentColor; }
@@ -151,10 +130,27 @@
     .btn-play:active { transform: scale(0.9); }
     .playing .btn-play { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 30px var(--accent); }
 
+    /* MOBILE ADJUSTMENTS (Tombol Turun) */
     @media (max-width: 480px) {
-        .glass-card { width: 100%; height: 100vh; border-radius: 0; border: none; padding: 50px 25px; max-height: none; }
-        /* Responsif di HP: Lebar menyesuaikan tapi Max Width dijaga agar tetap kotak */
-        .album-art { width: 75vw; height: 75vw; max-width: 300px; max-height: 300px; }
+        .glass-card { 
+            width: 100%; height: 100vh; border-radius: 0; border: none; 
+            padding: 20px 25px 40px 25px; /* Padding bawah lebih besar */
+            justify-content: flex-start; /* Default layout dari atas */
+        }
+        
+        .art-wrapper {
+            flex-grow: 1; /* Album art mengisi ruang kosong vertikal */
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .album-art { 
+            width: 80vw; height: 80vw; 
+            max-width: 320px; max-height: 320px; 
+        }
+
+        /* Group Info + Slider + Controls didorong ke bawah */
+        .info-container { margin-top: auto; } 
     }
 
     @keyframes scrollText { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
@@ -172,11 +168,12 @@
     <canvas id="colorCanvas" style="display:none;"></canvas>
 
     <div class="app-container">
+        
         <div id="setupView" class="glass-card">
             <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:center;">
                 <div class="setup-icon"><svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>
-                <h1>Lossless</h1>
-                <p class="desc">All audio file</p>
+                <h1>Pro Player</h1>
+                <p class="desc">Lossless Audio Streamer</p>
                 <input type="text" id="apiKeyInput" class="glass-input" placeholder="Google Drive API Key" autocomplete="off">
                 <input type="text" id="folderLinkInput" class="glass-input" placeholder="Google Drive Folder Link" autocomplete="off">
                 <p id="errorMsg" style="color:#ff6b6b; font-size:0.75rem; margin-top:5px; min-height:15px;"></p>
@@ -185,6 +182,7 @@
         </div>
 
         <div id="playerView" class="glass-card hidden-view">
+            
             <div class="art-wrapper">
                 <div class="album-art">
                     <span id="scanBadge" class="scan-badge">SCANNING...</span>
@@ -211,17 +209,19 @@
             </div>
 
             <div class="controls-row">
-                <button class="btn-icon" onclick="alert('Shuffle')"><svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg></button>
+                <button class="btn-icon" id="btnShuffle" onclick="toggleShuffle()"><svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg></button>
                 <button class="btn-icon" onclick="prevTrack()"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+                
                 <button class="btn-play" id="btnPlay" onclick="togglePlay()">
                     <svg id="iconPlay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     <svg id="iconPause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                 </button>
+
                 <button class="btn-icon" onclick="nextTrack()"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
                 <button class="btn-icon" id="btnRepeat" onclick="toggleRepeat()"><svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v6z"/></svg></button>
             </div>
             
-            <button onclick="resetPlayer()" style="margin-top:auto; background:none; border:none; color:rgba(255,255,255,0.2); font-size:0.75rem; cursor:pointer; letter-spacing:1px;">SWITCH FOLDER</button>
+            <button onclick="resetPlayer()" style="margin-top:10px; background:none; border:none; color:rgba(255,255,255,0.2); font-size:0.75rem; cursor:pointer; letter-spacing:1px;">SWITCH FOLDER</button>
         </div>
     </div>
 
@@ -235,11 +235,13 @@
     const errorMsg = document.getElementById('errorMsg');
     const scanBadge = document.getElementById('scanBadge');
     const qualityBadge = document.getElementById('qualityBadge');
+    const btnShuffle = document.getElementById('btnShuffle');
     
     let playlist = [];
     let currentIndex = 0;
     let isPlaying = false;
     let isRepeat = false;
+    let isShuffle = false;
     let globalApiKey = ""; 
 
     document.onkeydown = function(e) { if(e.keyCode == 123) return false; }
@@ -297,19 +299,27 @@
         extractCoverArt(streamUrl);
     }
 
+    // --- LOGIC BADGE (Fixed Logic) ---
     function determineQuality(mime, filename) {
         const ext = filename.split('.').pop().toLowerCase();
-        qualityBadge.style.display = 'none'; // Default OFF
+        
+        // Reset
+        qualityBadge.style.display = 'none';
         qualityBadge.className = 'quality-badge';
 
+        // Check Lossless
         if (mime.includes("flac") || mime.includes("wav") || ext === 'flac' || ext === 'wav' || ext === 'aiff') {
             qualityBadge.style.display = 'inline-flex';
-            qualityBadge.classList.add('lossless');
-            qualityBadge.textContent = "LOSSLESS";
-            if (filename.includes("96k") || filename.includes("24bit")) {
+            
+            // Cek Hi-Res (Simulasi dari nama file)
+            if (filename.includes("96k") || filename.includes("24bit") || filename.includes("192k") || filename.includes("88k")) {
+                qualityBadge.classList.add('hires');
                 qualityBadge.textContent = "HI-RES LOSSLESS";
+            } else {
+                qualityBadge.classList.add('lossless');
+                qualityBadge.textContent = "LOSSLESS";
             }
-        }
+        } 
     }
 
     function applyDynamicTheme(base64Image) {
@@ -331,9 +341,13 @@
             
             const playBtn = document.getElementById('btnPlay');
             playBtn.style.background = accent;
-            // Rumus kontras sederhana
+            // Kontras Warna
             playBtn.style.color = (r*0.299 + g*0.587 + b*0.114) > 150 ? 'black' : 'white';
             playBtn.style.boxShadow = `0 0 30px ${accent}`;
+            
+            // Update warna tombol shuffle/repeat jika aktif
+            if(isShuffle) btnShuffle.style.color = accent;
+            if(isRepeat) document.getElementById('btnRepeat').style.color = accent;
         }
     }
 
@@ -347,6 +361,7 @@
         playBtn.style.background = 'rgba(255,255,255,0.15)';
         playBtn.style.color = 'white';
         playBtn.style.boxShadow = 'none';
+        btnShuffle.style.color = "rgba(255,255,255,0.6)"; // Reset Shuffle color
     }
 
     async function extractCoverArt(url) {
@@ -387,6 +402,7 @@
         }
     }
 
+    // --- CONTROLS LOGIC ---
     function togglePlay() { if (audio.paused) { audio.play(); isPlaying = true; } else { audio.pause(); isPlaying = false; } updatePlayIcon(); }
     
     function updatePlayIcon() {
@@ -403,9 +419,30 @@
         }
     }
 
-    function nextTrack() { currentIndex = (currentIndex < playlist.length - 1) ? currentIndex + 1 : 0; loadTrack(currentIndex); }
+    function toggleShuffle() {
+        isShuffle = !isShuffle;
+        // Ubah warna icon tanpa alert
+        btnShuffle.style.color = isShuffle ? "var(--accent)" : "rgba(255,255,255,0.6)";
+    }
+
+    function nextTrack() { 
+        if (isShuffle) {
+            // Logic Shuffle Sederhana: Random Index
+            let rand = Math.floor(Math.random() * playlist.length);
+            while(rand === currentIndex && playlist.length > 1) { rand = Math.floor(Math.random() * playlist.length); }
+            currentIndex = rand;
+        } else {
+            currentIndex = (currentIndex < playlist.length - 1) ? currentIndex + 1 : 0; 
+        }
+        loadTrack(currentIndex); 
+    }
+
     function prevTrack() { currentIndex = (currentIndex > 0) ? currentIndex - 1 : playlist.length - 1; loadTrack(currentIndex); }
-    function toggleRepeat() { isRepeat = !isRepeat; audio.loop = isRepeat; document.getElementById('btnRepeat').style.color = isRepeat ? "var(--accent)" : "rgba(255,255,255,0.6)"; }
+    
+    function toggleRepeat() { 
+        isRepeat = !isRepeat; audio.loop = isRepeat; 
+        document.getElementById('btnRepeat').style.color = isRepeat ? "var(--accent)" : "rgba(255,255,255,0.6)"; 
+    }
 
     audio.addEventListener('ended', () => { if(!isRepeat) nextTrack(); });
     audio.addEventListener('pause', () => { isPlaying = false; updatePlayIcon(); });
