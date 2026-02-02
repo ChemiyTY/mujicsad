@@ -66,8 +66,8 @@
     
     /* 1. ART */
     .art-wrapper {
-        width: 100%; display: flex; justify-content: center; flex-shrink: 0;
-        margin-bottom: 15px;
+        width: 100%; display: flex; justify-content: center; align-items: center;
+        flex-shrink: 0; margin-bottom: 15px;
     }
     .album-art {
         width: 280px; height: 280px; border-radius: 24px;
@@ -81,7 +81,6 @@
     }
 
     /* 2. INFO & BADGE */
-    /* Container Info didorong ke bawah di Mobile */
     .info-container { 
         text-align: center; margin-bottom: 10px; min-height: 80px; 
         display: flex; flex-direction: column; justify-content: center;
@@ -91,7 +90,7 @@
     .song-title { font-size: 1.5rem; font-weight: 700; display: inline-block; line-height: 1.4; }
     .artist-name { font-size: 1rem; opacity: 0.6; margin: 4px 0 10px; }
 
-    /* BADGE STYLES */
+    /* BADGE STYLES (FIXED) */
     .quality-badge {
         display: none; align-items: center; justify-content: center;
         padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;
@@ -130,18 +129,17 @@
     .btn-play:active { transform: scale(0.9); }
     .playing .btn-play { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 30px var(--accent); }
 
-    /* MOBILE ADJUSTMENTS (Tombol Turun) */
+    /* MOBILE ADJUSTMENTS (TOMBOL TURUN KE BAWAH) */
     @media (max-width: 480px) {
         .glass-card { 
             width: 100%; height: 100vh; border-radius: 0; border: none; 
-            padding: 20px 25px 40px 25px; /* Padding bawah lebih besar */
-            justify-content: flex-start; /* Default layout dari atas */
+            padding: 30px 25px 50px 25px; /* Padding bawah extra untuk jempol */
+            justify-content: flex-end; /* FIX: Dorong semua ke bawah */
         }
         
         .art-wrapper {
-            flex-grow: 1; /* Album art mengisi ruang kosong vertikal */
-            align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: auto; /* FIX: Art didorong ke atas (isi ruang sisa) */
+            margin-top: 20px;
         }
         
         .album-art { 
@@ -149,8 +147,9 @@
             max-width: 320px; max-height: 320px; 
         }
 
-        /* Group Info + Slider + Controls didorong ke bawah */
-        .info-container { margin-top: auto; } 
+        .controls-row {
+            padding-bottom: 30px; /* Jarak aman dari edge bawah HP */
+        }
     }
 
     @keyframes scrollText { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
@@ -169,11 +168,11 @@
 
     <div class="app-container">
         
-        <div id="setupView" class="glass-card">
+        <div id="setupView" class="glass-card" style="justify-content: center;">
             <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:center;">
                 <div class="setup-icon"><svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>
                 <h1>LosslessPlay</h1>
-                <p class="desc">All audio</p>
+                <p class="desc">High Fidelity Streamer</p>
                 <input type="text" id="apiKeyInput" class="glass-input" placeholder="Google Drive API Key" autocomplete="off">
                 <input type="text" id="folderLinkInput" class="glass-input" placeholder="Google Drive Folder Link" autocomplete="off">
                 <p id="errorMsg" style="color:#ff6b6b; font-size:0.75rem; margin-top:5px; min-height:15px;"></p>
@@ -186,7 +185,7 @@
             <div class="art-wrapper">
                 <div class="album-art">
                     <span id="scanBadge" class="scan-badge">SCANNING...</span>
-                    <img id="albumCover" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" crossorigin="anonymous">
+                    <img id="albumCover" src="./cover.png" crossorigin="anonymous">
                 </div>
             </div>
 
@@ -287,9 +286,10 @@
         document.getElementById('playlistInfo').textContent = `Track ${index + 1} / ${playlist.length}`;
         
         checkTitleLength();
-        determineQuality(track.mimeType, track.name);
+        determineQuality(track.mimeType, track.name); // TRIGGER BADGE
 
-        document.getElementById('albumCover').src = "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
+        // Gambar Default (Local Path)
+        document.getElementById('albumCover').src = "./cover.png";
         resetTheme();
 
         const streamUrl = `https://www.googleapis.com/drive/v3/files/${track.id}?alt=media&key=${globalApiKey}`;
@@ -299,19 +299,20 @@
         extractCoverArt(streamUrl);
     }
 
-    // --- LOGIC BADGE (Fixed Logic) ---
+    // --- BADGE LOGIC YANG DIPERBAIKI ---
     function determineQuality(mime, filename) {
         const ext = filename.split('.').pop().toLowerCase();
         
-        // Reset
+        // Reset Badge Default Hidden
         qualityBadge.style.display = 'none';
         qualityBadge.className = 'quality-badge';
 
-        // Check Lossless
+        // Deteksi FLAC/WAV (Lossless)
         if (mime.includes("flac") || mime.includes("wav") || ext === 'flac' || ext === 'wav' || ext === 'aiff') {
             qualityBadge.style.display = 'inline-flex';
             
-            // Cek Hi-Res (Simulasi dari nama file)
+            // Deteksi HI-RES (Dari Nama File)
+            // Contoh: "Song_96kHz.flac" atau "Song_24bit.flac"
             if (filename.includes("96k") || filename.includes("24bit") || filename.includes("192k") || filename.includes("88k")) {
                 qualityBadge.classList.add('hires');
                 qualityBadge.textContent = "HI-RES LOSSLESS";
@@ -320,6 +321,7 @@
                 qualityBadge.textContent = "LOSSLESS";
             }
         } 
+        // Jika MP3/AAC, tidak masuk blok if ini, jadi badge tetap hidden.
     }
 
     function applyDynamicTheme(base64Image) {
@@ -341,11 +343,10 @@
             
             const playBtn = document.getElementById('btnPlay');
             playBtn.style.background = accent;
-            // Kontras Warna
             playBtn.style.color = (r*0.299 + g*0.587 + b*0.114) > 150 ? 'black' : 'white';
             playBtn.style.boxShadow = `0 0 30px ${accent}`;
             
-            // Update warna tombol shuffle/repeat jika aktif
+            // Update warna tombol shuffle/repeat jika sedang aktif
             if(isShuffle) btnShuffle.style.color = accent;
             if(isRepeat) document.getElementById('btnRepeat').style.color = accent;
         }
@@ -361,7 +362,7 @@
         playBtn.style.background = 'rgba(255,255,255,0.15)';
         playBtn.style.color = 'white';
         playBtn.style.boxShadow = 'none';
-        btnShuffle.style.color = "rgba(255,255,255,0.6)"; // Reset Shuffle color
+        btnShuffle.style.color = "rgba(255,255,255,0.6)"; 
     }
 
     async function extractCoverArt(url) {
@@ -402,7 +403,6 @@
         }
     }
 
-    // --- CONTROLS LOGIC ---
     function togglePlay() { if (audio.paused) { audio.play(); isPlaying = true; } else { audio.pause(); isPlaying = false; } updatePlayIcon(); }
     
     function updatePlayIcon() {
@@ -421,13 +421,13 @@
 
     function toggleShuffle() {
         isShuffle = !isShuffle;
-        // Ubah warna icon tanpa alert
-        btnShuffle.style.color = isShuffle ? "var(--accent)" : "rgba(255,255,255,0.6)";
+        // Ubah warna ikon shuffle sesuai tema saat ini
+        const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        btnShuffle.style.color = isShuffle ? accent : "rgba(255,255,255,0.6)";
     }
 
     function nextTrack() { 
         if (isShuffle) {
-            // Logic Shuffle Sederhana: Random Index
             let rand = Math.floor(Math.random() * playlist.length);
             while(rand === currentIndex && playlist.length > 1) { rand = Math.floor(Math.random() * playlist.length); }
             currentIndex = rand;
@@ -441,7 +441,8 @@
     
     function toggleRepeat() { 
         isRepeat = !isRepeat; audio.loop = isRepeat; 
-        document.getElementById('btnRepeat').style.color = isRepeat ? "var(--accent)" : "rgba(255,255,255,0.6)"; 
+        const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        document.getElementById('btnRepeat').style.color = isRepeat ? accent : "rgba(255,255,255,0.6)"; 
     }
 
     audio.addEventListener('ended', () => { if(!isRepeat) nextTrack(); });
